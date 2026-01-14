@@ -54,12 +54,12 @@ function statusTBU(tb, sd) {
 }
 
 function statusBBTB(bb, sd) {
-  if (bb < sd["-3"]) return "Sangat Kurus ";
-  if (bb < sd["-2"]) return "Kurus ";
+  if (bb < sd["-3"]) return "Sangat Kurus";
+  if (bb < sd["-2"]) return "Kurus";
   if (bb <= sd["+1"]) return "Normal";
   if (bb <= sd["+2"]) return "Risiko Gemuk";
-  if (bb <= sd["+3"]) return "Gemuk ";
-  return "Sangat Gemuk ";
+  if (bb <= sd["+3"]) return "Gemuk";
+  return "Sangat Gemuk";
 }
 
 
@@ -300,3 +300,4 @@ const jkEl = document.getElementById("jk");
 const usiaEl = document.getElementById("usia");
 const beratEl = document.getElementById("berat");
 const tinggiEl = document.getElementById("tinggi");
+
