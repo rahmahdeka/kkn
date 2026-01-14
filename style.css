@@ -114,3 +114,10 @@ canvas {
   height: 46px;
   border-radius: 50%;
 }
+
+/* CARD IMT */
+.card-yellow { 
+  background: linear-gradient(#fefce8, #fef9c3); 
+}
+
+
