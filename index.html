@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Status Gizi Anak</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Kalkulator Status Gizi Anak</h1>
+  <p class="subtitle">Isi data anak, lalu geser untuk melihat hasilnya</p>
+
+  <div class="form-group">
+    <label>Jenis Kelamin</label>
+    <select id="jk">
+      <option value="L">Laki-laki</option>
+      <option value="P">Perempuan</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Usia (bulan)</label>
+    <input type="number" id="usia">
+  </div>
+
+  <div class="form-group">
+    <label>Berat Badan (kg)</label>
+    <input type="number" step="0.1" id="berat">
+  </div>
+
+  <div class="form-group">
+    <label>Tinggi / Panjang Badan (cm)</label>
+    <input type="number" step="0.1" id="tinggi">
+  </div>
+
+  <button onclick="hitung()">🔍 Hitung Status Gizi</button>
+
+  <!-- SLIDER -->
+  <div class="slider-container">
+    <div class="slider">
+
+      <div class="slide active card-blue">
+        <h2>⚖️ Berat Badan Menurut Umur</h2>
+        <div class="chart-wrap">
+          <canvas id="grafikBBU"></canvas>
+        </div>
+        <div id="hasilBBU" class="hasil"></div>
+      </div>
+
+      <div class="slide card-green">
+        <h2>📏 Tinggi Badan Menurut Umur</h2>
+        <div class="chart-wrap">
+          <canvas id="grafikTBU"></canvas>
+        </div>
+        <div id="hasilTBU" class="hasil"></div>
+      </div>
+
+      <div class="slide card-pink">
+        <h2>⚖️📏 Berat Badan Menurut Tinggi Badan</h2>
+        <div class="chart-wrap">
+          <canvas id="grafikBBTB"></canvas>
+        </div>
+        <div id="hasilBBTB" class="hasil"></div>
+      </div>
+
+    </div>
+
+    <div class="slider-nav">
+      <button onclick="prevSlide()">◀</button>
+      <span id="slideIndicator">1 / 3</span>
+      <button onclick="nextSlide()">▶</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
