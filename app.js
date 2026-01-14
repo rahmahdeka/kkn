@@ -1,7 +1,7 @@
 /* =========================================================
    VARIABEL GLOBAL CHART
 ========================================================= */
-let chartBBU, chartTBU, chartBBTB;
+let chartBBU, chartTBU, chartBBTB, chartIMTU;
 
 /* =========================================================
    SLIDER
@@ -47,23 +47,34 @@ function statusBBU(bb, sd) {
 }
 
 function statusTBU(tb, sd) {
-  if (tb < sd["-3"]) return "Sangat Pendek (Severely Stunted)";
-  if (tb < sd["-2"]) return "Pendek (Stunted)";
+  if (tb < sd["-3"]) return "Sangat Pendek (Sangat Stunting)";
+  if (tb < sd["-2"]) return "Pendek (Stunting)";
   if (tb <= sd["+3"]) return "Normal";
   return "Tinggi";
 }
 
 function statusBBTB(bb, sd) {
-  if (bb < sd["-3"]) return "Gizi Buruk";
-  if (bb < sd["-2"]) return "Gizi Kurang";
+  if (bb < sd["-3"]) return "Sangat Kurus ";
+  if (bb < sd["-2"]) return "Kurus ";
   if (bb <= sd["+1"]) return "Normal";
-  if (bb <= sd["+2"]) return "Berisiko Gizi Lebih";
-  if (bb <= sd["+3"]) return "Gizi Lebih";
-  return "Obesitas";
+  if (bb <= sd["+2"]) return "Risiko Gemuk";
+  if (bb <= sd["+3"]) return "Gemuk ";
+  return "Sangat Gemuk ";
 }
 
+
+function statusIMTU(imt, sd) {
+  if (imt < sd["-3"]) return "Sangat Kurus";
+  if (imt < sd["-2"]) return "Kurus";
+  if (imt <= sd["+1"]) return "Normal";
+  if (imt <= sd["+2"]) return "Risiko Gemuk";
+  if (imt <= sd["+3"]) return "Gemuk";
+  return "Sangat Gemuk";
+}
+
+
 /* =========================================================
-   PENJELASAN RAMAH IBU-IBU
+   PENJELASAN 
 ========================================================= */
 function penjelasan(status, indeks) {
   const data = {
@@ -78,9 +89,9 @@ function penjelasan(status, indeks) {
         "Berat badan anak mulai berlebih. Perlu mengatur pola makan dan aktivitas anak."
     },
     TBU: {
-      "Sangat Pendek (Severely Stunted)":
+      "Sangat Pendek (Sangat Stunting)":
         "Tinggi badan anak jauh lebih pendek dari anak seusianya. Anak perlu diperiksa lebih lanjut.",
-      "Pendek (Stunted)":
+      "Pendek (Stunting)":
         "Tinggi badan anak lebih pendek dari normal. Perlu perhatian pada asupan gizi anak.",
       "Normal":
         "Tinggi badan anak sesuai dengan umurnya. Pertumbuhan anak tergolong baik.",
@@ -88,21 +99,35 @@ function penjelasan(status, indeks) {
         "Tinggi badan anak lebih tinggi dari anak seusianya. Tetap pantau pertumbuhan anak."
     },
     BBTB: {
-      "Gizi Buruk":
-        "Berat badan anak sangat kurang dibandingkan tinggi badannya. Perlu penanganan segera.",
-      "Gizi Kurang":
-        "Berat badan anak masih kurang dibandingkan tinggi badannya. Perlu perbaikan gizi.",
+      "Sangat Kurus":
+        "Berat badan anak sangat rendah dibandingkan tinggi badannya saat ini. Kondisi ini menandakan kekurangan gizi akut dan perlu penanganan segera.",
+      "Kurus":
+        "Berat badan anak lebih rendah dari yang seharusnya dibandingkan tinggi badannya. Perlu peningkatan asupan gizi dan pemantauan rutin.",
       "Normal":
-        "Berat dan tinggi badan anak sudah seimbang. Pertahankan pola makan sehat.",
-      "Berisiko Gizi Lebih":
-        "Berat badan anak mulai berlebih. Kurangi makanan manis dan berlemak.",
-      "Gizi Lebih":
-        "Berat badan anak berlebih. Perlu pengaturan pola makan dan aktivitas fisik.",
-      "Obesitas":
-        "Berat badan anak sangat berlebih. Sebaiknya dikonsultasikan ke tenaga kesehatan."
-    }
+        "Berat badan anak seimbang dengan tinggi badannya. Kondisi ini menunjukkan status gizi saat ini tergolong baik.",
+      "Risiko Gemuk":
+        "Berat badan anak mulai melebihi proporsi tinggi badannya. Perlu pengaturan pola makan agar tidak berlanjut.",
+      "Gemuk":
+        "Berat badan anak melebihi proporsi tinggi badannya. Anak berisiko mengalami gangguan kesehatan.",
+      "Sangat Gemuk (Obesitas)":
+        "Berat badan anak jauh melebihi proporsi tinggi badannya. Kondisi ini memerlukan perhatian dan pengelolaan gizi khusus."
+        },
+    IMTU: {
+      "Sangat Kurus":
+        "Indeks massa tubuh anak sangat rendah untuk usianya. Kondisi ini menunjukkan kekurangan gizi berat dan perlu penanganan segera.",
+      "Kurus":
+        "Indeks massa tubuh anak lebih rendah dari normal. Perlu peningkatan asupan gizi dan pemantauan rutin.",
+      "Normal":
+        "Indeks massa tubuh anak sesuai dengan usianya. Status gizi anak baik dan perlu dipertahankan.",
+      "Risiko Gemuk":
+        "Indeks massa tubuh anak mulai meningkat. Perlu pengaturan pola makan dan aktivitas fisik agar tidak berlanjut.",
+      "Gemuk (Kelebihan Berat Badan)":
+        "Indeks massa tubuh anak melebihi normal. Anak berisiko mengalami masalah kesehatan dan perlu pengelolaan gizi.",
+      "Sangat Gemuk (Obesitas)":
+        "Indeks massa tubuh anak sangat tinggi untuk usianya. Kondisi ini meningkatkan risiko penyakit dan memerlukan intervensi gizi."
+}
+    
   };
-
   return data[indeks][status] || "";
 }
 
@@ -110,17 +135,38 @@ function penjelasan(status, indeks) {
    GRAFIK
 ========================================================= */
 function makeDataset(json) {
-  const labels = ["-3","-2","-1","0","+1","+2","+3"];
-  const colors = ["#dc2626","#f97316","#facc15","#22c55e","#38bdf8","#6366f1","#a855f7"];
+  const sdKeys = ["-3","-2","-1","0","+1","+2","+3"];
 
-  return labels.map((l,i)=>({
-    label: `${l} SD`,
-    data: json.data.map(d => d.sd[l]),
+  const zonaLabel = {
+    "-3": "Perlu Perhatian",
+    "-2": "Perlu Pemantauan",
+    "-1": "Perlu Pemantauan",
+    "0":  "Normal",
+    "+1": "Normal",
+    "+2": "Di atas rata-rata",
+    "+3": "Di atas rata-rata"
+  };
+
+  const colors = [
+    "#dc2626", // merah
+    "#f97316", // oranye
+    "#facc15", // kuning
+    "#22c55e", // hijau
+    "#38bdf8", // biru muda
+    "#6366f1", // biru
+    "#a855f7"  // ungu
+  ];
+
+  return sdKeys.map((sd, i) => ({
+    label: zonaLabel[sd],
+    data: json.data.map(d => d.sd[sd]),
     borderColor: colors[i],
     borderWidth: 2,
-    pointRadius: 0
+    pointRadius: 0,
+    tension: 0.3
   }));
 }
+
 
 function addAnak(ds, x, y) {
   ds.push({
@@ -217,6 +263,34 @@ async function hitung() {
     data: { labels: bbtb.data.map(d => d.x), datasets: dsBBTB },
     options: chartOptions
   });
+
+    /* ===== IMT/U ===== */
+  const imt = bb / Math.pow(tb / 100, 2);
+
+  const imtuFile = usia <= 24
+    ? `data/IMT_U_${gender}_0_24.json`
+    : `data/IMT_U_${gender}_24_60.json`;
+
+  const imtu = await loadJSON(imtuFile);
+  const sdIMTU = getSD(imtu.data, usia);
+  const statusIMTUText = statusIMTU(imt, sdIMTU.sd);
+
+  hasilIMTU.innerHTML = `
+    <b>Status:</b> ${statusIMTUText}<br>
+    <b>IMT anak:</b> ${imt.toFixed(2)}<br>
+    <small>${penjelasan(statusIMTUText, "IMTU")}</small>
+  `;
+
+  if (chartIMTU) chartIMTU.destroy();
+  const dsIMTU = makeDataset(imtu);
+  addAnak(dsIMTU, usia, imt);
+
+  chartIMTU = new Chart(grafikIMTU, {
+    type: "line",
+    data: { labels: imtu.data.map(d => d.x), datasets: dsIMTU },
+    options: chartOptions
+  });
+
 }
 
 /* =========================================================
@@ -226,3 +300,4 @@ const jkEl = document.getElementById("jk");
 const usiaEl = document.getElementById("usia");
 const beratEl = document.getElementById("berat");
 const tinggiEl = document.getElementById("tinggi");
+
