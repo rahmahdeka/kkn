@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Kalkulator Status Gizi Anak</title>
+  <title>Kalkulator Status Gizi Balita</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- FONT -->
@@ -14,8 +14,9 @@
 <body>
 
 <div class="container">
-  <h1>Kalkulator Status Gizi Anak</h1>
-  <p class="subtitle">Isi data anak, lalu geser untuk melihat hasilnya</p>
+  <h1>Kalkulator Status Gizi Balita</h1>
+  <p class="subtitle"> Kalkulator ini hanya diperuntukkan untuk anak usia 1-5 Tahun</p>
+  <p class="subtitle"> Isi data anak, lalu geser untuk melihat hasilnya</p>
 
   <div class="form-group">
     <label>Jenis Kelamin</label>
@@ -69,6 +70,15 @@
         </div>
         <div id="hasilBBTB" class="hasil"></div>
       </div>
+
+      <div class="slide card-yellow">
+        <h2>📊 Indeks Massa Tubuh Menurut Umur</h2>
+        <div class="chart-wrap">
+          <canvas id="grafikIMTU"></canvas>
+        </div>
+        <div id="hasilIMTU" class="hasil"></div>
+      </div>
+
 
     </div>
 
